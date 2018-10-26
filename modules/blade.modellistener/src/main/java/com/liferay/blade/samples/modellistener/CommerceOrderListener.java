@@ -36,7 +36,7 @@ public class CommerceOrderListener extends BaseModelListener<CommerceOrder> {
 	public static Log log = LogFactoryUtil.getLog(CommerceOrderListener.class);
 
 	@Override
-	public void onBeforeCreate(CommerceOrder model) throws ModelListenerException {
+	public void onAfterCreate(CommerceOrder model) throws ModelListenerException {
 		log.info("About to create order: " + model.getPurchaseOrderNumber());
 
 		sendMailWithPlainText("bosh@mail.com", "client@mail.com");
