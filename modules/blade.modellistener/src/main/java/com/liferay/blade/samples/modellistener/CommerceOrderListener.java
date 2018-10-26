@@ -14,18 +14,18 @@
 
 package com.liferay.blade.samples.modellistener;
 
-import com.liferay.commerce.model.CommerceOrder;
-
 import javax.mail.internet.InternetAddress;
 
+import org.osgi.service.component.annotations.Component;
+
+import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.ModelListenerException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModelListener;
-
 import com.liferay.portal.kernel.model.ModelListener;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Liferay
@@ -33,12 +33,13 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true, service = ModelListener.class)
 public class CommerceOrderListener extends BaseModelListener<CommerceOrder> {
 
+	public static Log log = LogFactoryUtil.getLog(CommerceOrderListener.class);
+
 	@Override
 	public void onBeforeCreate(CommerceOrder model) throws ModelListenerException {
-		System.out.println(
-			"About to create order: " + model.getPurchaseOrderNumber());
+		log.info("About to create order: " + model.getPurchaseOrderNumber());
 
-			sendMailWithPlainText("bosh@mail.com", "client@mail.com");
+		sendMailWithPlainText("bosh@mail.com", "client@mail.com");
 
 	}
 
@@ -52,9 +53,9 @@ public class CommerceOrderListener extends BaseModelListener<CommerceOrder> {
 			mailMessage.setBody("We are happy to work on this new order, Thank you!");
 			MailServiceUtil.sendEmail(mailMessage);
 
-			System.out.println("Mail sent ...");
+			log.info("Hackathon Mail sent ...");
 		} catch (Exception e) {
-				e.printStackTrace();
+			log.error("Error when try send email");
 		}
 	}
 
